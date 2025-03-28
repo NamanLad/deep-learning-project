@@ -1,0 +1,362 @@
+[
+    {
+      "user_request": "Write a function to find the minimum cost path to reach (m, n) from (0, 0) for the given cost matrix cost[][] and a position (m, n) in cost[][].",
+      "conversations": [
+        {
+          "role": "ceo",
+          "content": "Requirements:\n- Dynamic programming solution\n- Handle 2D cost matrix\n- Return minimum path cost from (0,0) to (m,n)\n- Include edge cases for empty matrix or invalid coordinates"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef min_cost_path(cost, m, n):\n    if not cost or m < 0 or n < 0:\n        return -1\n    \n    dp = [[0]*len(cost[0]) for _ in range(len(cost))]\n    dp[0][0] = cost[0][0]\n    \n    for i in range(1, m+1):\n        dp[i][0] = dp[i-1][0] + cost[i][0]\n    \n    for j in range(1, n+1):\n        dp[0][j] = dp[0][j-1] + cost[0][j]\n    \n    for i in range(1, m+1):\n        for j in range(1, n+1):\n            dp[i][j] = cost[i][j] + min(dp[i-1][j], dp[i][j-1])\n    \n    return dp[m][n]\n```"
+        },
+        {
+          "role": "tester",
+          "content": "Test Report:\n- Passes for normal 3x3 matrix\n- Fails when m/n exceeds matrix bounds\n- Returns -1 for empty matrix (correct)\n- Needs boundary checks for m/n values"
+        },
+        {
+          "role": "reviewer",
+          "content": "Code Review:\n- Add input validation for m/n being within bounds\n- Consider space optimization by using 1D dp array\n- Add docstring explaining parameters and return value\n- Handle case where start == end (0,0)"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef min_cost_path(cost, m, n):\n    \"\"\"\n    Find minimum cost path from (0,0) to (m,n) in given cost matrix.\n    \n    Args:\n        cost: 2D list of costs\n        m: target row index (0-based)\n        n: target column index (0-based)\n    \n    Returns:\n        Minimum path cost or -1 for invalid inputs\n    \"\"\"\n    if not cost or m >= len(cost) or n >= len(cost[0]) or m < 0 or n < 0:\n        return -1\n    \n    if m == 0 and n == 0:\n        return cost[0][0]\n    \n    dp = [0] * (n+1)\n    dp[0] = cost[0][0]\n    \n    for j in range(1, n+1):\n        dp[j] = dp[j-1] + cost[0][j]\n    \n    for i in range(1, m+1):\n        dp[0] += cost[i][0]\n        for j in range(1, n+1):\n            dp[j] = cost[i][j] + min(dp[j], dp[j-1])\n    \n    return dp[n]\n```"
+        }
+      ],
+      "final_output": {
+        "requirements": "Dynamic programming solution to find minimum path cost in 2D matrix from (0,0) to (m,n) with input validation",
+        "code": "Improved version with space optimization and better input handling",
+        "test_report": "Passes normal cases and edge cases after improvements",
+        "review_comments": "Added input validation, space optimization, and documentation"
+      },
+      "metadata": {
+        "domain": "dynamic programming",
+        "complexity": "medium",
+        "language": "python"
+      }
+    },
+    {
+      "user_request": "Write a function to find the similar elements from the given two tuple lists.",
+      "conversations": [
+        {
+          "role": "ceo",
+          "content": "Requirements:\n- Compare elements between two lists of tuples\n- Return common elements preserving tuple structure\n- Handle empty lists\n- Maintain original order of first list"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef find_similar_tuples(list1, list2):\n    return [item for item in list1 if item in list2]\n```"
+        },
+        {
+          "role": "tester",
+          "content": "Test Report:\n- Works for basic cases\n- Fails when tuples contain mutable elements\n- Slow for large lists (O(n^2) complexity)\n- Preserves order as required"
+        },
+        {
+          "role": "reviewer",
+          "content": "Code Review:\n- Convert list2 to set for O(1) lookups\n- Add type hints\n- Handle case where inputs aren't lists\n- Add docstring"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef find_similar_tuples(list1: list[tuple], list2: list[tuple]) -> list[tuple]:\n    \"\"\"\n    Find common tuples between two lists.\n    \n    Args:\n        list1: First list of tuples\n        list2: Second list of tuples\n    \n    Returns:\n        List of tuples present in both lists, in order of first appearance in list1\n    \"\"\"\n    if not isinstance(list1, list) or not isinstance(list2, list):\n        return []\n    \n    set2 = set(list2)\n    return [item for item in list1 if item in set2]\n```"
+        }
+      ],
+      "final_output": {
+        "requirements": "Function to find common tuples between two lists with efficient lookup",
+        "code": "Optimized version with set conversion and type hints",
+        "test_report": "Passes all test cases including edge cases",
+        "review_comments": "Improved performance and added type safety"
+      },
+      "metadata": {
+        "domain": "list operations",
+        "complexity": "easy",
+        "language": "python"
+      }
+    },
+    {
+      "user_request": "Write a python function to identify non-prime numbers.",
+      "conversations": [
+        {
+          "role": "ceo",
+          "content": "Requirements:\n- Function to check if number is not prime\n- Handle numbers <= 1\n- Optimize for performance (check up to sqrt(n))\n- Return boolean"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef is_not_prime(n):\n    if n <= 1:\n        return True\n    for i in range(2, n):\n        if n % i == 0:\n            return True\n    return False\n```"
+        },
+        {
+          "role": "tester",
+          "content": "Test Report:\n- Correctly identifies 0,1 as non-prime\n- Correct for primes under 100\n- Very slow for large numbers\n- Fails for negative inputs"
+        },
+        {
+          "role": "reviewer",
+          "content": "Code Review:\n- Optimize by checking only up to sqrt(n)\n- Handle negative numbers\n- Add docstring\n- Consider adding memoization for repeated calls"
+        },
+        {
+          "role": "coder",
+          "content": "```python\nimport math\n\ndef is_not_prime(n: int) -> bool:\n    \"\"\"\n    Check if a number is not prime.\n    \n    Args:\n        n: Integer to check\n    \n    Returns:\n        True if number is not prime, False otherwise\n    \"\"\"\n    if n <= 1:\n        return True\n    if n < 0:\n        n = -n\n    for i in range(2, int(math.sqrt(n)) + 1):\n        if n % i == 0:\n            return True\n    return False\n```"
+        }
+      ],
+      "final_output": {
+        "requirements": "Function to identify non-prime numbers with optimized checking",
+        "code": "Optimized version with sqrt check and negative number handling",
+        "test_report": "Passes all test cases with improved performance",
+        "review_comments": "Added optimizations and documentation"
+      },
+      "metadata": {
+        "domain": "number theory",
+        "complexity": "easy",
+        "language": "python"
+      }
+    },
+    {
+      "user_request": "Write a function to find the largest integers from a given list of numbers using heap queue algorithm.",
+      "conversations": [
+        {
+          "role": "ceo",
+          "content": "Requirements:\n- Use heapq module\n- Find top k largest numbers\n- Handle empty list\n- Return sorted list in descending order"
+        },
+        {
+          "role": "coder",
+          "content": "```python\nimport heapq\n\ndef find_largest(numbers, k):\n    return heapq.nlargest(k, numbers)\n```"
+        },
+        {
+          "role": "tester",
+          "content": "Test Report:\n- Works for basic cases\n- Returns empty list when k=0\n- Returns all numbers when k > len(numbers)\n- Preserves order when duplicates exist"
+        },
+        {
+          "role": "reviewer",
+          "content": "Code Review:\n- Add input validation\n- Handle non-integer k values\n- Add docstring\n- Consider adding parameter for custom sort key"
+        },
+        {
+          "role": "coder",
+          "content": "```python\nimport heapq\n\ndef find_largest(numbers: list, k: int) -> list:\n    \"\"\"\n    Find k largest numbers using heap queue algorithm.\n    \n    Args:\n        numbers: List of numbers\n        k: Number of largest elements to return\n    \n    Returns:\n        List of k largest numbers in descending order\n    \"\"\"\n    if not isinstance(numbers, list) or not isinstance(k, int) or k < 0:\n        return []\n    return heapq.nlargest(k, numbers)\n```"
+        }
+      ],
+      "final_output": {
+        "requirements": "Function to find k largest numbers using heapq",
+        "code": "Version with input validation and type hints",
+        "test_report": "Passes all test cases including edge cases",
+        "review_comments": "Added input validation and documentation"
+      },
+      "metadata": {
+        "domain": "algorithms",
+        "complexity": "medium",
+        "language": "python"
+      }
+    },
+    {
+      "user_request": "Write a function to find the number of ways to fill it with 2 x 1 dominoes for the given 3 x n board.",
+      "conversations": [
+        {
+          "role": "ceo",
+          "content": "Requirements:\n- Dynamic programming solution\n- Calculate number of tilings for 3xn grid\n- Handle edge cases (n=0, n=1)\n- Return count modulo 10^9+7 for large n"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef domino_tiling(n):\n    if n == 0:\n        return 0\n    dp = [0] * (n+1)\n    dp[0] = 1\n    dp[1] = 0\n    dp[2] = 3\n    for i in range(3, n+1):\n        dp[i] = dp[i-2] * 3\n    return dp[n]\n```"
+        },
+        {
+          "role": "tester",
+          "content": "Test Report:\n- Correct for n=2\n- Incorrect for n=4 (should be 11)\n- Fails for odd n (should return 0)\n- Needs modulo operation"
+        },
+        {
+          "role": "reviewer",
+          "content": "Code Review:\n- Formula needs correction for complete solution\n- Add handling for odd n\n- Add modulo operation\n- Add memoization alternative"
+        },
+        {
+          "role": "coder",
+          "content": "```python\nMOD = 10**9 + 7\n\ndef domino_tiling(n):\n    \"\"\"\n    Calculate number of ways to tile 3xn board with 2x1 dominoes.\n    \n    Args:\n        n: width of the board\n    \n    Returns:\n        Number of tilings modulo 10^9+7\n    \"\"\"\n    if n % 2 != 0:\n        return 0\n    if n == 0:\n        return 1\n    \n    dp = [0] * (n+1)\n    dp[0] = 1\n    dp[2] = 3\n    \n    for i in range(4, n+1, 2):\n        dp[i] = (4 * dp[i-2] - dp[i-4]) % MOD\n    \n    return dp[n]\n```"
+        }
+      ],
+      "final_output": {
+        "requirements": "Function to count domino tilings for 3xn board with modulo",
+        "code": "Corrected version with proper recurrence relation",
+        "test_report": "Passes all test cases including edge cases",
+        "review_comments": "Fixed formula and added modulo operation"
+      },
+      "metadata": {
+        "domain": "combinatorics",
+        "complexity": "hard",
+        "language": "python"
+      }
+    },
+    {
+      "user_request": "Write a python function to check whether the two numbers differ at one bit position only or not.",
+      "conversations": [
+        {
+          "role": "ceo",
+          "content": "Requirements:\n- Compare two integers\n- Check if their binary representations differ by exactly one bit\n- Handle edge cases (same numbers)\n- Optimize using bit operations"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef differ_by_one_bit(a, b):\n    xor = a ^ b\n    return bin(xor).count('1') == 1\n```"
+        },
+        {
+          "role": "tester",
+          "content": "Test Report:\n- Works for positive numbers\n- Correctly handles 0 cases\n- Fails for negative numbers\n- String conversion is inefficient"
+        },
+        {
+          "role": "reviewer",
+          "content": "Code Review:\n- Use bit manipulation instead of string conversion\n- Add handling for negative numbers\n- Add docstring\n- Consider adding type hints"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef differ_by_one_bit(a: int, b: int) -> bool:\n    \"\"\"\n    Check if two numbers differ by exactly one bit.\n    \n    Args:\n        a, b: Integers to compare\n    \n    Returns:\n        True if binary representations differ by exactly one bit\n    \"\"\"\n    xor = a ^ b\n    return xor != 0 and (xor & (xor - 1)) == 0\n```"
+        }
+      ],
+      "final_output": {
+        "requirements": "Function to check single bit difference using bit operations",
+        "code": "Optimized version with bit manipulation",
+        "test_report": "Passes all test cases including negatives",
+        "review_comments": "Improved performance and added documentation"
+      },
+      "metadata": {
+        "domain": "bit manipulation",
+        "complexity": "medium",
+        "language": "python"
+      }
+    },
+    {
+      "user_request": "Write a function to find all words which are at least 4 characters long in a string by using regex.",
+      "conversations": [
+        {
+          "role": "ceo",
+          "content": "Requirements:\n- Use regular expressions\n- Find words with length >= 4\n- Handle punctuation\n- Return list of matching words"
+        },
+        {
+          "role": "coder",
+          "content": "```python\nimport re\n\ndef find_long_words(text):\n    return re.findall(r'\\w{4,}', text)\n```"
+        },
+        {
+          "role": "tester",
+          "content": "Test Report:\n- Finds basic words\n- Fails with hyphenated words\n- Includes numbers\n- Doesn't handle apostrophes"
+        },
+        {
+          "role": "reviewer",
+          "content": "Code Review:\n- Improve word boundary detection\n- Add option to exclude numbers\n- Handle apostrophes in contractions\n- Add docstring"
+        },
+        {
+          "role": "coder",
+          "content": "```python\nimport re\n\ndef find_long_words(text: str, exclude_numbers: bool = False) -> list[str]:\n    \"\"\"\n    Find words with 4+ characters using regex.\n    \n    Args:\n        text: Input string\n        exclude_numbers: If True, exclude words containing digits\n    \n    Returns:\n        List of matching words\n    \"\"\"\n    pattern = r\"\\b[a-zA-Z']{4,}\\b\" if exclude_numbers else r\"\\b[\\w']{4,}\\b\"\n    return re.findall(pattern, text)\n```"
+        }
+      ],
+      "final_output": {
+        "requirements": "Regex function to find long words with options",
+        "code": "Improved version with better pattern matching",
+        "test_report": "Handles more edge cases correctly",
+        "review_comments": "Added flexibility and better word detection"
+      },
+      "metadata": {
+        "domain": "text processing",
+        "complexity": "medium",
+        "language": "python"
+      }
+    },
+    {
+      "user_request": "Write a function to find squares of individual elements in a list using lambda function.",
+      "conversations": [
+        {
+          "role": "ceo",
+          "content": "Requirements:\n- Use lambda function\n- Square each element\n- Handle non-numeric elements\n- Return new list"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef square_elements(lst):\n    return list(map(lambda x: x**2, lst))\n```"
+        },
+        {
+          "role": "tester",
+          "content": "Test Report:\n- Works for integers\n- Works for floats\n- Crashes with strings\n- Returns empty list for empty input"
+        },
+        {
+          "role": "reviewer",
+          "content": "Code Review:\n- Add type checking\n- Handle non-numeric elements gracefully\n- Add docstring\n- Consider list comprehension alternative"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef square_elements(lst: list) -> list:\n    \"\"\"\n    Square each element in a list using lambda.\n    \n    Args:\n        lst: Input list of numbers\n    \n    Returns:\n        New list with squared elements, skipping non-numeric values\n    \"\"\"\n    return [x**2 for x in lst if isinstance(x, (int, float))]\n```"
+        }
+      ],
+      "final_output": {
+        "requirements": "Function to square list elements with type checking",
+        "code": "Version with list comprehension and type checking",
+        "test_report": "Handles all test cases including edge cases",
+        "review_comments": "Improved robustness and readability"
+      },
+      "metadata": {
+        "domain": "list operations",
+        "complexity": "easy",
+        "language": "python"
+      }
+    },
+    {
+      "user_request": "Write a python function to find the minimum number of rotations required to get the same string.",
+      "conversations": [
+        {
+          "role": "ceo",
+          "content": "Requirements:\n- Find minimum rotations to get original string\n- Handle empty string\n- Case sensitive\n- Return 0 if no rotation needed"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef min_rotations(s):\n    n = len(s)\n    for i in range(1, n+1):\n        if s == s[i:] + s[:i]:\n            return i\n    return 0\n```"
+        },
+        {
+          "role": "tester",
+          "content": "Test Report:\n- Works for 'abab' (returns 2)\n- Correct for 'aaaa' (returns 1)\n- Returns 0 for non-rotatable strings\n- Slow for long strings"
+        },
+        {
+          "role": "reviewer",
+          "content": "Code Review:\n- Optimize using string concatenation\n- Add early exit for non-rotatable strings\n- Add docstring\n- Handle single character case"
+        },
+        {
+          "role": "coder",
+          "content": "```python\ndef min_rotations(s: str) -> int:\n    \"\"\"\n    Find minimum rotations to get original string.\n    \n    Args:\n        s: Input string\n    \n    Returns:\n        Minimum rotations needed (0 if not rotatable)\n    \"\"\"\n    if not s or len(s) == 1:\n        return 0\n    \n    doubled = s + s\n    n = len(s)\n    \n    for i in range(1, n):\n        if doubled.startswith(s[i:]) and doubled.endswith(s[:i]):\n            return i\n    \n    return 0\n```"
+        }
+      ],
+      "final_output": {
+        "requirements": "Function to find minimum string rotations with optimization",
+        "code": "Optimized version using string doubling",
+        "test_report": "Passes all test cases with better performance",
+        "review_comments": "Added optimizations and edge case handling"
+      },
+      "metadata": {
+        "domain": "string manipulation",
+        "complexity": "medium",
+        "language": "python"
+      }
+    },
+    {
+      "user_request": "Write a function to get the n smallest items from a dataset.",
+      "conversations": [
+        {
+          "role": "ceo",
+          "content": "Requirements:\n- Use heapq module\n- Return n smallest items\n- Handle empty dataset\n- Preserve original order for equal items"
+        },
+        {
+          "role": "coder",
+          "content": "```python\nimport heapq\n\ndef n_smallest(items, n):\n    return heapq.nsmallest(n, items)\n```"
+        },
+        {
+          "role": "tester",
+          "content": "Test Report:\n- Works for basic cases\n- Returns empty list when n=0\n- Returns all items when n > len(items)\n- Preserves order for equal items"
+        },
+        {
+          "role": "reviewer",
+          "content": "Code Review:\n- Add input validation\n- Handle non-integer n\n- Add docstring\n- Consider adding key parameter like sorted()"
+        },
+        {
+          "role": "coder",
+          "content": "```python\nimport heapq\n\ndef n_smallest(items: list, n: int, key=None) -> list:\n    \"\"\"\n    Get n smallest items from dataset.\n    \n    Args:\n        items: Input dataset\n        n: Number of smallest items to return\n        key: Optional key function for comparison\n    \n    Returns:\n        List of n smallest items\n    \"\"\"\n    if not isinstance(n, int) or n < 0:\n        return []\n    if key:\n        return heapq.nsmallest(n, items, key=key)\n    return heapq.nsmallest(n, items)\n```"
+        }
+      ],
+      "final_output": {
+        "requirements": "Function to get n smallest items with key function support",
+        "code": "Enhanced version with key parameter and validation",
+        "test_report": "Passes all test cases including edge cases",
+        "review_comments": "Added flexibility and input validation"
+      },
+      "metadata": {
+        "domain": "algorithms",
+        "complexity": "easy",
+        "language": "python"
+      }
+    }
+  ]
